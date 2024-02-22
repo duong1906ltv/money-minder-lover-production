@@ -1,0 +1,31 @@
+Bot: Hello nn béo. Hôm nay nn béo muốn làm gì
+Bot: Vui lòng click vào điều bạn muốn hoặc nhập số tương ứng
+1. Cập nhật thu nhập
+2. Cập nhật chi tiêu
+Nếu user chọn Cập nhật thu nhập
+Bot: Bạn đã chọn cập nhật thu nhập. Bạn muốn nhập thu nhập theo format hay từng câu 1?
+1. Theo format:
+2. Nhập từng dòng
+* Nếu user chọn theo format
+Bot: NN béo vui lòng nhập giống format bên dưới:
+Thời gian:
+Hạng mục:
+số tiền:
+* Nếu user chọn theo format
+Bot: Vui lòng nhập thời gian
+Bot: Vui lòng nhập hạng mục
+Bot: Vui lòng nhập số tiền
+
+Nếu user chọn Cập nhật chi tiêu
+Bot: Bạn đã chọn cập nhật chi tiêu. Bạn muốn nhập thu nhập theo format hay từng câu 1?
+1. Theo format:
+2. Nhập từng dòng
+* Nếu user chọn theo format
+Bot: NN béo vui lòng nhập giống format bên dưới:
+Thời gian:
+Hạng mục:
+số tiền:
+* Nếu user chọn theo format
+Bot: Vui lòng nhập thời gian
+Bot: Vui lòng nhập hạng mục
+Bot: Vui lòng nhập số tiền
