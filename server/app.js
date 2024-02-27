@@ -20,11 +20,13 @@ import expenseRouter from "./routers/expenseRouter.js";
 import userRouter from "./routers/userRouter.js";
 import authRouter from "./routers/authRouter.js";
 import ggsRouter from "./routers/ggsRouter.js";
+import creditRouter from "./routers/creditRouter.js";
 
 app.use("/api/v1/expenses", expenseRouter);
 app.use("/api/v1/users", authenticateUser, userRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/ggs", ggsRouter);
+app.use("/api/v1/credits", creditRouter);
 
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -44,6 +46,7 @@ app.use(errorHandlerMiddleware);
 
 // Socket Handling
 import { authenticateUser } from "./middleware/authMiddleware.js";
+import { task } from "./controllers/creditController.js";
 
 app.use("*", (req, res) => {
   res.status(404).json({ msg: "not found" });
@@ -61,5 +64,7 @@ const start = async () => {
     console.log(error);
   }
 };
+
+task.start();
 
 start();
