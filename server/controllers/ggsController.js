@@ -148,10 +148,10 @@ export const updateExpenseSheet = async (req, res) => {
     const datetime = format("dd/MM/yyyy", new Date());
 
     const rowData = {
-      "Thời gian": datetime,
+      "Thời gian": req.body.date ? req.body.date : datetime,
       "Hạng mục": req.body.category,
       "Số tiền": req.body.money,
-      "Ghi chú": req.body.note,
+      "Ghi chú": req.body.note ? req.body.note : "",
     };
 
     await sheet.addRow(rowData);
