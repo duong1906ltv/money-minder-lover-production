@@ -2,6 +2,16 @@ import { GoogleSpreadsheet } from "google-spreadsheet";
 import { JWT } from "google-auth-library";
 import format from "date-format";
 import { formatCell } from "../utils/formatCell.js";
+import { google } from "googleapis";
+
+const auth = new google.auth.GoogleAuth({
+  keyFile: "./utils/credentials.json",
+  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+});
+
+const client = await auth.getClient();
+
+const googleSheets = google.sheets({ version: "v4", auth: client });
 
 export const getIncomeCategory = async (req, res) => {
   try {
@@ -148,6 +158,7 @@ export const updateExpenseSheet = async (req, res) => {
     const datetime = format("dd/MM/yyyy", new Date());
 
     const rowData = {
+      STT: sheet.rowCount - 1,
       "Thời gian": req.body.date ? req.body.date : datetime,
       "Hạng mục": req.body.category,
       "Số tiền": req.body.money,
@@ -155,6 +166,8 @@ export const updateExpenseSheet = async (req, res) => {
     };
 
     await sheet.addRow(rowData);
+
+    await createFilter("13upxVyrriIHEIN9e0oBTt-wHJTzYaEpQjjudUS_d_Zg", 0, 10);
 
     const { lastColumnLetter, rowCount } = sheet;
     await sheet.loadCells(`A1:${lastColumnLetter}${rowCount}`);
@@ -169,3 +182,41 @@ export const updateExpenseSheet = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+async function createFilter(spreadsheetId, startColumnIndex, endColumnIndex) {
+  try {
+    const response = await googleSheets.spreadsheets.get({
+      spreadsheetId: spreadsheetId,
+      ranges: ["3. Chi tiêu"],
+      includeGridData: false,
+    });
+    const sheetProperties = response.data.sheets[0].properties;
+    const sheetId = sheetProperties.sheetId;
+    const lastRow = sheetProperties.gridProperties.rowCount;
+
+    const request = {
+      spreadsheetId: spreadsheetId,
+      resource: {
+        requests: [
+          {
+            setBasicFilter: {
+              filter: {
+                range: {
+                  sheetId: sheetId,
+                  startRowIndex: 1,
+                  endRowIndex: lastRow,
+                  startColumnIndex: startColumnIndex,
+                  endColumnIndex: endColumnIndex + 1, // Kết thúc ở cột K nên cần +1
+                },
+              },
+            },
+          },
+        ],
+      },
+    };
+
+    await googleSheets.spreadsheets.batchUpdate(request);
+  } catch (error) {
+    console.error("Error creating filter:", error);
+  }
+}

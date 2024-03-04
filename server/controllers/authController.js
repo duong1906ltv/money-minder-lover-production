@@ -48,12 +48,21 @@ export const loginUser = async (req, res) => {
     const token = createJWT({ userId: user._id, role: user.role });
 
     const oneDay = 1000 * 60 * 60 * 24;
+    const oneMonth = oneDay * 30;
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      expires: new Date(Date.now() + oneDay),
-      secure: process.env.NODE_ENV === "production",
-    });
+    if (user.role === "admin") {
+      res.cookie("adminToken", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + oneMonth),
+        secure: process.env.NODE_ENV === "production",
+      });
+    } else {
+      res.cookie("token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + oneDay),
+        secure: process.env.NODE_ENV === "production",
+      });
+    }
 
     res.status(StatusCodes.OK).json({ message: "Login successful" });
   } catch (error) {
