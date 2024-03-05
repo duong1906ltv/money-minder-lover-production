@@ -170,10 +170,9 @@ export const updateExpenseSheet = async (req, res) => {
     await createFilter("13upxVyrriIHEIN9e0oBTt-wHJTzYaEpQjjudUS_d_Zg", 0, 10);
 
     const { lastColumnLetter, rowCount } = sheet;
-    await sheet.loadCells(`A1:${lastColumnLetter}${rowCount}`);
     const lastColumnIndex = lastColumnLetter.charCodeAt(0) - 65 + 1;
 
-    formatCell(sheet, lastColumnIndex, rowCount);
+    formatCell(sheet, lastColumnIndex, rowCount, lastColumnIndex);
     res
       .status(200)
       .json({ message: "Expense sheet has been updated successfully" });
@@ -220,3 +219,52 @@ async function createFilter(spreadsheetId, startColumnIndex, endColumnIndex) {
     console.error("Error creating filter:", error);
   }
 }
+
+// Cập nhật sheet chi tiêu hàng loạt
+
+export const updateExpenseSheetBatch = async (req, res) => {
+  try {
+    const serviceAccountAuth = new JWT({
+      email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      key: process.env.GOOGLE_PRIVATE_KEY.split(String.raw`\n`).join("\n"),
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    });
+
+    const doc = new GoogleSpreadsheet(
+      "13upxVyrriIHEIN9e0oBTt-wHJTzYaEpQjjudUS_d_Zg",
+      serviceAccountAuth
+    );
+    await doc.loadInfo();
+    const sheet = doc.sheetsByTitle["3. Chi tiêu"];
+    sheet.loadHeaderRow(2);
+    const { lastColumnLetter, rowCount } = sheet;
+    const lastColumnIndex = lastColumnLetter.charCodeAt(0) - 65 + 1;
+    // const datetime = format("dd/MM/yyyy", new Date());
+
+    const items = req.body.input.split(";");
+
+    const rowData = items.map((item, index) => {
+      const [date, money, note] = item.split(" - ");
+
+      return {
+        STT: sheet.rowCount - 1 + index,
+        "Thời gian": date,
+        "Hạng mục": req.body.category,
+        "Số tiền": money,
+        "Ghi chú": note,
+      };
+    });
+
+    await sheet.addRows(rowData);
+
+    await createFilter("13upxVyrriIHEIN9e0oBTt-wHJTzYaEpQjjudUS_d_Zg", 0, 10);
+
+    formatCell(sheet, lastColumnIndex, rowCount, lastColumnIndex, items.length);
+    res
+      .status(200)
+      .json({ message: "Expense sheet has been updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};

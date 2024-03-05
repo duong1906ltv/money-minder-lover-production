@@ -29,7 +29,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
     updateChatbotState(message1);
 
     const message2 = createChatBotMessage(
-      "NN muốn nhập thu nhập theo format hay từng câu 1?",
+      "NN muốn nhập thu nhập bằng cách nào?",
       { widget: "InputOption", withAvatar: true, delay: 500 }
     );
     updateChatbotState(message2, "inputOption");
@@ -270,6 +270,17 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
     }));
   };
 
+  const handleUpdateExpensesBatch = () => {
+    const message = createChatBotMessage(
+      <div>
+        NN Béo nhập format như phía dưới nha ( Nhấn end để kết thúc nhập)
+        <br />
+        Ngày (DD/MM/YYYY) - Số tiền - Note
+      </div>
+    );
+    updateChatbotState(message, "batchInput");
+  };
+
   return (
     <>
       {React.Children.map(children, (child) => {
@@ -285,6 +296,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
             handleIncomeBySentencesNote,
             handleInitial,
             handleUpdateExpenses,
+            handleUpdateExpensesBatch,
           },
         });
       })}

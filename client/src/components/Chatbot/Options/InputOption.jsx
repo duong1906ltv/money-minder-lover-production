@@ -3,12 +3,16 @@ import { List } from "antd";
 function InputOption(props) {
   const data = [
     {
-      text: "1. Theo format",
+      text: "1. Cập nhật theo format",
       id: 1,
     },
     {
-      text: "2. Từng câu",
+      text: "2. Cập nhật theo từng câu",
       id: 2,
+    },
+    {
+      text: "3. Cập nhật hàng loạt",
+      id: 3,
     },
   ];
   return (

@@ -43,6 +43,14 @@ const MessageParser = ({ children, actions }) => {
         actions.handleUpdateExpenses(message);
       }
     }
+    if (checker === "batchInput") {
+      if (children.props.state.updateData.type === 1) {
+        actions.handleUpdateIncomes(message);
+      }
+      if (children.props.state.updateData.type === 2) {
+        actions.handleUpdateExpenses(message);
+      }
+    }
   };
 
   return (
