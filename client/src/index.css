@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.react-chatbot-kit-chat-bot-message {
+  width: fit-content;
+}
+
+
 *,
 ::after,
 ::before {

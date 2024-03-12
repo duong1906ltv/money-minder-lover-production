@@ -270,15 +270,19 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
     }));
   };
 
-  const handleUpdateExpensesBatch = () => {
+  const handleUpdateBatchChoice = () => {
     const message = createChatBotMessage(
       <div>
-        NN Béo nhập format như phía dưới nha ( Nhấn end để kết thúc nhập)
+        NN Béo nhập format như phía dưới nha ( Nhấn "End" để kết thúc nhập)
         <br />
         Ngày (DD/MM/YYYY) - Số tiền - Note
       </div>
     );
     updateChatbotState(message, "batchInput");
+  };
+
+  const handleBatchUpdateAPI = () => {
+    console.log(children.props.children.props.state.bathInputText);
   };
 
   return (
@@ -296,7 +300,8 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
             handleIncomeBySentencesNote,
             handleInitial,
             handleUpdateExpenses,
-            handleUpdateExpensesBatch,
+            handleUpdateBatchChoice,
+            handleBatchUpdateAPI,
           },
         });
       })}

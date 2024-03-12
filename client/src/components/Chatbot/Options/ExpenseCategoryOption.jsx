@@ -10,7 +10,11 @@ function ExpenseCategoryOption(props) {
     props.state.updateData.category = value;
   };
   const handleSubmit = () => {
-    props.actions.handleSelectDate();
+    if (props.state.inputType === 3) {
+      props.actions.handleUpdateBatchChoice();
+    } else {
+      props.actions.handleSelectDate();
+    }
   };
   // Queries
   const query = useQuery({
@@ -22,7 +26,7 @@ function ExpenseCategoryOption(props) {
     <Space>
       <Select
         style={{
-          width: 120,
+          width: 200,
         }}
         allowClear
         options={query.data}

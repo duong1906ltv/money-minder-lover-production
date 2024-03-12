@@ -44,11 +44,13 @@ const MessageParser = ({ children, actions }) => {
       }
     }
     if (checker === "batchInput") {
-      if (children.props.state.updateData.type === 1) {
-        actions.handleUpdateIncomes(message);
-      }
-      if (children.props.state.updateData.type === 2) {
-        actions.handleUpdateExpenses(message);
+      if (message.toLowerCase().includes("end")) {
+        actions.handleBatchUpdateAPI();
+      } else {
+        // console.log(children.props.state);
+
+        children.props.state.bathInputText =
+          children.props.state.bathInputText + ";" + message;
       }
     }
   };

@@ -13,9 +13,6 @@ const items = [
     label: "Week View",
     value: "week",
   },
-  // {
-  //   type: "divider",
-  // },
   {
     label: "Month View",
     value: "month",

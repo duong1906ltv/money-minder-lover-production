@@ -33,6 +33,7 @@ const config = {
       note: "",
     },
     inputType: 0,
+    bathInputText: "",
   },
   botName: botName,
   customStyles: {
