@@ -31,9 +31,9 @@ const config = {
       type: "",
       money: 0,
       note: "",
+      input: "",
     },
     inputType: 0,
-    bathInputText: "",
   },
   botName: botName,
   customStyles: {

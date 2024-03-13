@@ -10,4 +10,9 @@ async function updateExpense(newExpenseData) {
   return res.data;
 }
 
-export { fetchExpenseCategories, updateExpense };
+async function updateExpenseSheetBatch(newExpenseDatas) {
+  const res = await customFetch.post("/ggs/expenses", newExpenseDatas);
+  return res.data;
+}
+
+export { fetchExpenseCategories, updateExpense, updateExpenseSheetBatch };

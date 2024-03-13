@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { updateIncome } from "../../apis/Income";
-import { updateExpense } from "../../apis/Expense";
+import { updateExpense, updateExpenseSheetBatch } from "../../apis/Expense";
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   const addIncomeMutation = useMutation({
@@ -10,6 +10,10 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 
   const addExpenseMutation = useMutation({
     mutationFn: updateExpense,
+  });
+
+  const addExpenseBatchMutation = useMutation({
+    mutationFn: updateExpenseSheetBatch,
   });
 
   const handleInitial = () => {
@@ -281,8 +285,21 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
     updateChatbotState(message, "batchInput");
   };
 
-  const handleBatchUpdateAPI = () => {
-    console.log(children.props.children.props.state.bathInputText);
+  const handleBatchUpdateAPI = async () => {
+    try {
+      await addExpenseBatchMutation.mutateAsync(
+        children.props.children.props.state.updateData
+      );
+    } catch (error) {
+      console.error("Error adding income:", error);
+    }
+
+    const message = createChatBotMessage(
+      "Cập nhật chi tiêu ok rồi đó NN béo, check sheet xem"
+    );
+
+    updateChatbotState(message);
+    endChatbotSession();
   };
 
   return (

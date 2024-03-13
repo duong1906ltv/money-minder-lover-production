@@ -2,7 +2,7 @@
 import React from "react";
 
 const MessageParser = ({ children, actions }) => {
-  const { checker } = children.props.state;
+  const { checker, updateData } = children.props.state;
   const parse = (message) => {
     if (checker === null) {
       if (message.includes("1")) {
@@ -47,10 +47,11 @@ const MessageParser = ({ children, actions }) => {
       if (message.toLowerCase().includes("end")) {
         actions.handleBatchUpdateAPI();
       } else {
-        // console.log(children.props.state);
-
-        children.props.state.bathInputText =
-          children.props.state.bathInputText + ";" + message;
+        if (updateData.input === "") {
+          updateData.input = message;
+        } else {
+          updateData.input = updateData.input + "; " + message;
+        }
       }
     }
   };
