@@ -120,6 +120,7 @@ export const updateIncomeSheet = async (req, res) => {
     const datetime = format("dd/MM/yyyy", new Date());
 
     const rowData = {
+      STT: sheet.rowCount - 1,
       "Thời gian": req.body.date ? req.body.date : datetime,
       "Loại thu nhập": req.body.category,
       "Số tiền": req.body.money,
@@ -128,10 +129,10 @@ export const updateIncomeSheet = async (req, res) => {
     await sheet.addRow(rowData);
 
     const { lastColumnLetter, rowCount } = sheet;
-    await sheet.loadCells(`A1:${lastColumnLetter}${rowCount}`);
+    // await sheet.loadCells(`A1:${lastColumnLetter}${rowCount}`);
     const lastColumnIndex = lastColumnLetter.charCodeAt(0) - 65 + 1;
 
-    formatCell(sheet, lastColumnIndex, rowCount);
+    formatCell(sheet, lastColumnIndex, rowCount, lastColumnLetter);
 
     res.status(200).json({ message: "Income updated successfully" });
   } catch (error) {
@@ -172,7 +173,7 @@ export const updateExpenseSheet = async (req, res) => {
     const { lastColumnLetter, rowCount } = sheet;
     const lastColumnIndex = lastColumnLetter.charCodeAt(0) - 65 + 1;
 
-    formatCell(sheet, lastColumnIndex, rowCount, lastColumnIndex);
+    formatCell(sheet, lastColumnIndex, rowCount, lastColumnLetter);
     res
       .status(200)
       .json({ message: "Expense sheet has been updated successfully" });
@@ -237,8 +238,7 @@ export const updateExpenseSheetBatch = async (req, res) => {
     await doc.loadInfo();
     const sheet = doc.sheetsByTitle["3. Chi tiêu"];
     sheet.loadHeaderRow(2);
-    const { lastColumnLetter, rowCount } = sheet;
-    const lastColumnIndex = lastColumnLetter.charCodeAt(0) - 65 + 1;
+
     // const datetime = format("dd/MM/yyyy", new Date());
 
     const items = req.body.input.split(";");
@@ -257,9 +257,19 @@ export const updateExpenseSheetBatch = async (req, res) => {
 
     await sheet.addRows(rowData);
 
+    const { lastColumnLetter, rowCount } = sheet;
+    const lastColumnIndex = lastColumnLetter.charCodeAt(0) - 65 + 1;
+
+    formatCell(
+      sheet,
+      lastColumnIndex,
+      rowCount,
+      lastColumnLetter,
+      items.length
+    );
+
     await createFilter("13upxVyrriIHEIN9e0oBTt-wHJTzYaEpQjjudUS_d_Zg", 0, 10);
 
-    formatCell(sheet, lastColumnIndex, rowCount, lastColumnIndex, items.length);
     res
       .status(200)
       .json({ message: "Expense sheet has been updated successfully" });

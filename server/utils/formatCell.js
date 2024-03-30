@@ -10,7 +10,7 @@ export const formatCell = async (
     for (let col = 1; col <= lastColumnIndex; col++) {
       const sourceRange = `${String.fromCharCode(65 + col - 1)}3`;
       const targetRange = `${String.fromCharCode(65 + col - 1)}${
-        rowCount + row
+        rowCount - row + 1
       }`;
       const sourceCell = sheet.getCellByA1(sourceRange);
       const targetCell = sheet.getCellByA1(targetRange);

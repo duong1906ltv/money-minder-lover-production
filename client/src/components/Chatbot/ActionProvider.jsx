@@ -290,6 +290,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       await addExpenseBatchMutation.mutateAsync(
         children.props.children.props.state.updateData
       );
+      children.props.children.props.state.updateData.input = "";
     } catch (error) {
       console.error("Error adding income:", error);
     }

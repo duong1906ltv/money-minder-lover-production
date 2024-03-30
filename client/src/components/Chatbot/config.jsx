@@ -24,6 +24,7 @@ const config = {
       type: "",
       money: 0,
       note: "",
+      input: "",
     },
     updateData: {
       category: "",

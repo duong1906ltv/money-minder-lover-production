@@ -31,9 +31,7 @@ export const task = cron.schedule(
       const today = new Date().setHours(0, 0, 0, 0);
       const payDate = new Date(credit.payDate).setHours(0, 0, 0, 0);
       const diffTime = Math.abs(payDate - today);
-      console.log(diffTime);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      console.log(diffDays);
       if ([1, 3, 7].includes(diffDays)) {
         // Viet mailOptions. voi noi dung: con diffDays nua toi han tra the
         const mailOptions = {
